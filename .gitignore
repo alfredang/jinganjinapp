@@ -1,0 +1,22 @@
+# Xcode / build
+build/
+build-device/
+DerivedData/
+*.xcuserstate
+xcuserdata/
+.DS_Store
+
+# XcodeGen generates this from project.yml
+JingangJing.xcodeproj/
+
+# Secrets / credentials — never commit
+*.env
+.env
+.env.*
+*.p8
+*.p12
+*.pem
+*.mobileprovision
+
+# Playwright MCP artifacts
+.playwright-mcp/
