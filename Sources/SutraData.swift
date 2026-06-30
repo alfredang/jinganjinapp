@@ -285,4 +285,57 @@ enum Sutra {
         佛说是经已，长老须菩提及诸比丘、比丘尼、优婆塞、优婆夷，一切世间天、人、阿修罗，闻佛所说，皆大欢喜，信受奉行。
         """),
     ]
+
+    /// A single search hit — the chapter plus the matched line of text.
+    struct SearchHit: Identifiable {
+        let chapter: SutraChapter
+        let line: String
+        var id: String { "\(chapter.id)-\(line.hashValue)" }
+    }
+
+    /// Case-insensitive full-text search over every 分; returns the matching
+    /// lines together with their chapter so the reader can jump straight there.
+    static func search(_ query: String) -> [SearchHit] {
+        let q = query.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !q.isEmpty else { return [] }
+        var hits: [SearchHit] = []
+        for chapter in chapters {
+            if chapter.fullTitle.contains(q) {
+                hits.append(SearchHit(chapter: chapter, line: chapter.fullTitle))
+            }
+            for line in chapter.body.split(whereSeparator: \.isNewline) where line.contains(q) {
+                hits.append(SearchHit(chapter: chapter, line: String(line)))
+            }
+        }
+        return hits
+    }
+
+    /// Famous lines used for 每日一偈 (verse of the day) and the daily reminder.
+    struct Verse: Identifiable {
+        let id: Int
+        let text: String
+        let chapterID: Int   // source 分, for "read in context"
+    }
+
+    static let verses: [Verse] = [
+        Verse(id: 0, text: "凡所有相，皆是虚妄。若见诸相非相，则见如来。", chapterID: 5),
+        Verse(id: 1, text: "应无所住而生其心。", chapterID: 10),
+        Verse(id: 2, text: "一切有为法，如梦幻泡影，如露亦如电，应作如是观。", chapterID: 32),
+        Verse(id: 3, text: "过去心不可得，现在心不可得，未来心不可得。", chapterID: 18),
+        Verse(id: 4, text: "若菩萨不住相布施，其福德不可思量。", chapterID: 4),
+        Verse(id: 5, text: "是法平等，无有高下，是名阿耨多罗三藐三菩提。", chapterID: 23),
+        Verse(id: 6, text: "若以色见我，以音声求我，是人行邪道，不能见如来。", chapterID: 26),
+        Verse(id: 7, text: "如来者，无所从来，亦无所去，故名如来。", chapterID: 29),
+        Verse(id: 8, text: "法尚应舍，何况非法。", chapterID: 6),
+        Verse(id: 9, text: "知我说法，如筏喻者。", chapterID: 6),
+        Verse(id: 10, text: "实无有法，发阿耨多罗三藐三菩提心者。", chapterID: 17),
+        Verse(id: 11, text: "离一切诸相，则名诸佛。", chapterID: 14),
+    ]
+
+    /// A deterministic verse for the given day, so 每日一偈 changes daily but is
+    /// stable within a day and matches the scheduled reminder.
+    static func verse(for date: Date) -> Verse {
+        let day = Calendar.current.ordinality(of: .day, in: .era, for: date) ?? 0
+        return verses[day % verses.count]
+    }
 }

@@ -7,6 +7,10 @@ struct ChapterDetailView: View {
     let chapter: SutraChapter
     @AppStorage(ReaderFont.key) private var fontScale: Double = 1.0
     @ObservedObject private var speech = SpeechManager.shared
+    @EnvironmentObject private var store: AppStore
+
+    /// Plain-text share payload for this 分.
+    private var shareText: String { "《金刚经》\(chapter.fullTitle)\n\n\(chapter.body)" }
 
     private var speechID: String { "ch-\(chapter.id)" }
     private var bodyFontSize: CGFloat { 19 * fontScale }
@@ -56,8 +60,19 @@ struct ChapterDetailView: View {
         .background(Theme.bg)
         .navigationTitle(chapter.fullTitle)
         .navigationBarTitleDisplayMode(.inline)
+        .onAppear { store.markRead(chapter.id) }
         .toolbar {
             ToolbarItemGroup(placement: .topBarTrailing) {
+                Button {
+                    store.toggleBookmark(chapter.id)
+                } label: {
+                    Image(systemName: store.isBookmarked(chapter.id) ? "bookmark.fill" : "bookmark")
+                }
+                .accessibilityLabel(store.isBookmarked(chapter.id) ? "取消收藏" : "收藏")
+
+                ShareLink(item: shareText) { Image(systemName: "square.and.arrow.up") }
+                    .accessibilityLabel("分享")
+
                 Button {
                     fontScale = max(ReaderFont.min, fontScale - ReaderFont.step)
                 } label: { Image(systemName: "textformat.size.smaller") }
@@ -153,4 +168,5 @@ struct TrailingIconLabelStyle: LabelStyle {
     NavigationStack {
         ChapterDetailView(chapter: Sutra.chapters[0])
     }
+    .environmentObject(AppStore.shared)
 }

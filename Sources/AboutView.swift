@@ -53,6 +53,23 @@ struct AboutView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .background(Theme.card, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
 
+                    // Feedback link
+                    NavigationLink {
+                        FeedbackView()
+                    } label: {
+                        HStack {
+                            Label("意见反馈", systemImage: "bubble.left.and.bubble.right.fill")
+                                .foregroundStyle(Theme.ink)
+                            Spacer()
+                            Image(systemName: "chevron.right")
+                                .font(.footnote.weight(.semibold))
+                                .foregroundStyle(.tertiary)
+                        }
+                        .padding(18)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(Theme.card, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+                    }
+
                     // Version row
                     HStack {
                         Text("版本").foregroundStyle(Theme.ink)

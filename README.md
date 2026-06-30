@@ -11,8 +11,15 @@ highlighting, and an adjustable, comfortable reading experience — fully offlin
 
 - 📖 **Complete scripture** — all 32 分, from「法会因由分第一」to「应化非真分第三十二」.
 - 📜 **Two reading modes** — per-chapter reader, or a continuous full-text scroll of the whole sutra.
+- 🔍 **Full-text search** — search across all 32 分, with matches highlighted and tap-to-jump to the chapter.
 - 🔊 **Read-aloud (TTS)** — Mandarin recitation via Apple's on-device `AVSpeechSynthesizer`,
   with the currently-spoken sentence highlighted live and adjustable speed (慢 / 正常 / 快).
+- 📿 **Recitation counter (持诵)** — an interactive tap counter with haptics, daily + lifetime
+  totals, and a configurable daily target (21 / 49 / 108 / 1080).
+- 🔖 **Bookmarks (收藏)** — save chapters for quick return; swipe to remove.
+- 📊 **Reading progress** — per-chapter read tracking with a progress ring and "continue reading".
+- ☀️ **Verse of the day (每日一偈)** — a daily famous line, with an optional daily **local-notification** reminder.
+- 📤 **Share** — share any chapter's text via the system share sheet.
 - 🔠 **Adjustable text size** — scale the body type up or down; the preference persists.
 - 🌙 **Light & dark mode** — a warm "sutra paper" theme via Asset Catalog color tokens.
 - 📡 **Fully offline** — all text is bundled in the app; no network, no account, no data collected.
@@ -20,14 +27,18 @@ highlighting, and an adjustable, comfortable reading experience — fully offlin
 
 ## Screens
 
-| Chapter list | Reader + TTS | About |
-|---|---|---|
-| `经文` tab — title header + 32 chapters | per-chapter reading with 诵读 / 语速 controls | app info, developer, version |
+The app uses a five-tab layout:
+
+| 经文 (Read) | 持诵 (Recite) | 收藏 (Bookmarks) | 设置 (Settings) | 关于 (About) |
+|---|---|---|---|---|
+| Daily verse, progress ring, search, 32-chapter list | Tap counter with daily / lifetime totals + target | Saved chapters | Font size, speech speed, daily reminder | App info, developer, feedback, version |
 
 ## Tech stack
 
-- **Swift 5** · **SwiftUI** (declarative UI, `TabView` + `NavigationStack`)
+- **Swift 5** · **SwiftUI** (declarative UI, `TabView` + `NavigationStack`, `.searchable`, `ShareLink`)
 - **AVFoundation** — `AVSpeechSynthesizer` for Mandarin text-to-speech
+- **UserNotifications** — opt-in daily local-notification reminder (每日一偈)
+- **UserDefaults** — persists bookmarks, reading progress, recitation counts and preferences
 - **XcodeGen** — project generated from [`project.yml`](project.yml)
 - Deployment target **iOS 17+**, universal (iPhone + iPad)
 
@@ -36,15 +47,20 @@ highlighting, and an adjustable, comfortable reading experience — fully offlin
 ```
 project.yml                 # XcodeGen project definition
 Sources/
-  JingangJingApp.swift      # @main app entry
-  MainTabView.swift         # root TabView: 经文 / 反馈 / 关于
-  SutraData.swift           # full text of all 32 分 as structured data
-  SutraHomeView.swift       # chapter list + header
-  ChapterDetailView.swift   # per-chapter reader (TTS + highlight + font size)
+  JingangJingApp.swift      # @main app entry (injects AppStore, refreshes reminder)
+  MainTabView.swift         # root TabView: 经文 / 持诵 / 收藏 / 设置 / 关于
+  AppStore.swift            # persisted state: bookmarks, progress, recitation counter, reminder
+  SutraData.swift           # full text of all 32 分 + search + verse-of-the-day
+  SutraHomeView.swift       # daily verse, progress ring, full-text search, chapter list
+  ChapterDetailView.swift   # per-chapter reader (TTS + highlight + font + bookmark + share)
   FullTextView.swift        # continuous full-sutra reading
+  ReciteView.swift          # 持诵 recitation counter (daily/lifetime totals + target)
+  BookmarksView.swift       # 收藏 saved chapters
+  SettingsView.swift        # 设置 font / speed / daily reminder / progress reset
   SpeechManager.swift       # AVSpeechSynthesizer wrapper
-  FeedbackView.swift        # WhatsApp feedback form
-  AboutView.swift           # app / developer / version
+  NotificationManager.swift # daily verse local-notification scheduling
+  FeedbackView.swift        # WhatsApp feedback form (reached from About)
+  AboutView.swift           # app / developer / feedback / version
   Theme.swift               # central color tokens
 Resources/
   Info.plist

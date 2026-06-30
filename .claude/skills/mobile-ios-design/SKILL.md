@@ -1,6 +1,6 @@
 ---
 name: mobile-ios-design
-description: Master SwiftUI and Apple Human Interface Guidelines patterns for building native iOS apps. Use when designing iOS interfaces, implementing SwiftUI UI, adding navigation (TabView / NavigationStack), theming, or following Apple's HIG. Includes the Tertiary Infotech house-style bottom-tab nav with Feedback + About tabs.
+description: Master SwiftUI and Apple Human Interface Guidelines patterns for building native iOS apps. Use when designing iOS interfaces, implementing SwiftUI UI, adding navigation (TabView / NavigationStack), theming, or following Apple's HIG. Includes the Tertiary Infotech Academy house-style bottom-tab nav with Feedback + About tabs.
 license: MIT
 metadata:
   version: "1.0.0"
@@ -43,7 +43,7 @@ Deeper material is split into `references/` to keep this body small:
 ## Bottom-tab navigation with Feedback + About (house style)
 
 Add a root `TabView` with the app's content as the first tab, plus **Feedback** and **About**
-tabs in the Tertiary Infotech house style. (Full code: `references/ios-navigation.md`.)
+tabs in the Tertiary Infotech Academy house style. (Full code: `references/ios-navigation.md`.)
 
 - **Feedback tab:** `Title` + `Message` fields and a **Send via WhatsApp** button that opens
   `https://wa.me/6588666375?text=<title + message>`. Build the URL with `URLComponents` /

@@ -1,7 +1,7 @@
 # iOS Navigation (SwiftUI)
 
 Patterns for structuring navigation in a native SwiftUI app, plus the **full reference
-implementation** of the Tertiary Infotech house-style **bottom-tab nav with Feedback + About**.
+implementation** of the Tertiary Infotech Academy house-style **bottom-tab nav with Feedback + About**.
 
 ## Picking a container
 

@@ -20,3 +20,7 @@ JingangJing.xcodeproj/
 
 # Playwright MCP artifacts
 .playwright-mcp/
+
+# Local scratch / logs (session)
+scratchpad/
+__pycache__/

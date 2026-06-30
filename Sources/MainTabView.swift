@@ -1,12 +1,18 @@
 import SwiftUI
 
 struct MainTabView: View {
+    @EnvironmentObject private var store: AppStore
+
     var body: some View {
         TabView {
             SutraHomeView()
                 .tabItem { Label("经文", systemImage: "book.fill") }
-            FeedbackView()
-                .tabItem { Label("反馈", systemImage: "bubble.left.and.bubble.right.fill") }
+            ReciteView()
+                .tabItem { Label("持诵", systemImage: "hand.tap.fill") }
+            BookmarksView()
+                .tabItem { Label("收藏", systemImage: "bookmark.fill") }
+            SettingsView()
+                .tabItem { Label("设置", systemImage: "gearshape.fill") }
             AboutView()
                 .tabItem { Label("关于", systemImage: "info.circle.fill") }
         }
@@ -15,5 +21,5 @@ struct MainTabView: View {
 }
 
 #Preview {
-    MainTabView()
+    MainTabView().environmentObject(AppStore.shared)
 }

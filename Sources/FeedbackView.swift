@@ -13,9 +13,8 @@ struct FeedbackView: View {
     }
 
     var body: some View {
-        NavigationStack {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 20) {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 20) {
                     Text("欢迎提出您的建议或反馈，我们将通过 WhatsApp 收到您的留言。")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
@@ -54,11 +53,11 @@ struct FeedbackView: View {
                     .tint(Theme.accent)
                     .disabled(!canSend)
                 }
-                .padding(22)
-            }
-            .background(Theme.bg)
-            .navigationTitle("反馈")
+            .padding(22)
         }
+        .background(Theme.bg)
+        .navigationTitle("反馈")
+        .navigationBarTitleDisplayMode(.inline)
     }
 
     private func send() {

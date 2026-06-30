@@ -309,11 +309,27 @@ def ensure_version(tok, aid, target, screenshots_dir):
     return vid, True
 
 
+def ensure_export_compliance(tok, build):
+    """Answer the export-compliance question if it's blank. A build uploaded without
+    ITSAppUsesNonExemptEncryption in Info.plist has usesNonExemptEncryption=None, and
+    submitting it 409s with STATE_ERROR.ENTITY_STATE_INVALID ("not in valid state").
+    Default to False (standard/exempt encryption only). Add ITSAppUsesNonExemptEncryption
+    to Info.plist to answer this at build time and avoid the round-trip."""
+    if build["attributes"].get("usesNonExemptEncryption") is not None:
+        return
+    bid = build["id"]
+    s, _ = call("PATCH", f"/v1/builds/{bid}",
+                {"data": {"type": "builds", "id": bid,
+                          "attributes": {"usesNonExemptEncryption": False}}}, tok)
+    print(f"set usesNonExemptEncryption=false on build (export compliance): {s}", flush=True)
+
+
 def attach_build(tok, aid, vid, build_number):
     s, d = jget("GET", f"/v1/apps/{aid}/builds?limit=50", tok)
     target = next((b for b in d["data"] if str(b["attributes"]["version"]) == str(build_number)), None)
     if not target:
         sys.exit(f"build {build_number} not found")
+    ensure_export_compliance(tok, target)   # avoid a submit-time 409 on an unanswered build
     s, _ = call("PATCH", f"/v1/appStoreVersions/{vid}/relationships/build",
                 {"data": {"type": "builds", "id": target["id"]}}, tok)
     print(f"attached build {build_number}: {s}", flush=True)
