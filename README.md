@@ -5,6 +5,12 @@ built with SwiftUI. It presents the complete scripture across all **32 chapters 
 chapter-by-chapter and full-text reading, Mandarin text-to-speech with live sentence
 highlighting, and an adjustable, comfortable reading experience — fully offline.
 
+<a href="https://apps.apple.com/app/diamond-sutra-%E9%87%91%E5%88%9A%E7%BB%8F/id6784362803">
+  <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Download on the App Store" height="48">
+</a>
+
+📲 **[Download on the App Store](https://apps.apple.com/app/diamond-sutra-%E9%87%91%E5%88%9A%E7%BB%8F/id6784362803)**
+
 ![金刚经 — chapter list](screenshot.png)
 
 ## Features
